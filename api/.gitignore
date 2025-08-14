@@ -3,7 +3,8 @@
 .idea
 .DS_Store
 staticfiles/
-.envs/*
+.env.*
+.env
 
 __pycache__/
 *.py[codz]

@@ -1,0 +1,5 @@
+-r base.txt
+
+psycopg2-binary==2.9.10
+watchfiles==0.21.0
+black==24.3.0
