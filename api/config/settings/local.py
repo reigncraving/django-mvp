@@ -2,8 +2,8 @@ from os import getenv, path
 
 from dotenv import load_dotenv
 
-from .base import *  # noqa
-from .base import BASE_DIR
+from config.settings.base import *  # noqa
+from config.settings.base import BASE_DIR
 
 local_env_file = path.join(BASE_DIR, ".env", ".env.local")
 
@@ -27,3 +27,26 @@ EMAIL_HOST = getenv("EMAIL_HOST")
 EMAIL_PORT = getenv("EMAIL_PORT")
 DOMAIN = getenv("DOMAIN")
 DEFAULT_FROM_EMAIL = getenv("DEFAULT_FROM_EMAIL")
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "%(levelname)s %(name)-12s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"
+        }
+    },
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        }
+    },
+    "root": {
+        "level": "INFO",
+        "handlers": [
+            "console"
+        ]
+    },
+}
