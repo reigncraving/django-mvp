@@ -1,4 +1,5 @@
-from os import getenv, path
+from os import path
+from pathlib import Path
 
 from dotenv import load_dotenv
 
@@ -7,7 +8,7 @@ from .base import BASE_DIR
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
+BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent  # noqa: F811
 
 APPS_DIR = BASE_DIR / "core_apps"
 
@@ -43,7 +44,14 @@ THIRD_PARTY_APPS = [
     "django_celery_beat",
 ]
 
-LOCAL_APPS = []
+LOCAL_APPS = [
+    "core_apps.issues",
+    "core_apps.users",
+    "core_apps.common",
+    "core_apps.profiles",
+    "core_apps.ratings",
+    "core_apps.posts",
+]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
