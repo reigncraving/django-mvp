@@ -18,7 +18,6 @@ RUN pip wheel --wheel-dir /usr/scr/app/wheels \
     -r ${BUILD_ENVIRONMENT}.txt
 
 # Stage2: Python run stage.
-
 FROM python AS python-run-stage
 WORKDIR ${APP_HOME}
 
@@ -46,10 +45,19 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=python-build-stage /usr/scr/app/wheels /wheels/
-
 RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
     && rm -rf /wheels/
 
 COPY --chown=django:django ./docker/local/django/entrypoint.sh /entrypoint
-
 RUN sed -i 's/\r$//g' /entrypoint
+RUN chmod +x /entrypoint
+
+COPY --chwon=django:django ./docker/local/django/start.sh /start
+RUN sed -i 's/\r$//g' /start
+RUN chmod +x /start
+
+COPY --chwon=django:django . ${APP_HOME}
+RUN chown django:django ${APP_HOME}
+USER django
+
+ENTRYPOINT [ "/entrypoint" ]
