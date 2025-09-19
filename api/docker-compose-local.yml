@@ -1,0 +1,60 @@
+services:
+  # anchor for references
+  api: &api
+    image: alpha-apartments-api:local-latest
+    container_name: alpha_apartments_api
+    volumes:
+      - .:/app:z
+      - ./staticfiles:/app/staticfiles
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./.env.local
+    depends_on:
+      - postgres
+      - mailpit
+    # shellscript
+    command: >
+        bash -c "python manage.py migrate --no-input
+        && python manage.py colecstatic --no-input
+        && exec python manage.py runserver 0.0.0.0:8000"
+    networks:
+      - alpha_apartments_production_network
+  
+  postgres:
+    image: alpha-postgres-db:local-latest
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - alpha_apartments_prod_db_data:/var/lib/postgresql/data
+    env_file:
+      - ./.env.local
+    networks:
+      - alpha_apartments_production_network
+
+  # good for local development, prod should use Mailgun
+  mailpit:
+    image: docker.io/axllent/mailpit:v1.15
+    container_name: mailpit
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    volumes:
+      - alpha_apartments_prod_mailpit_data:/data
+    environment:
+      MP_MAX_MESSAGES: 5000
+      MP_DATA_FILE: /data/mailpit.db
+      # unsecure login for dev:
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+    networks:
+      - alpha_apartments_production_network
+
+networks:
+  alpha_apartments_production_network:
+    external: true
+
+volumes:
+  alpha_apartments_prod_db_data: {}
+  alpha_apartments_prod_mailpit_data: {}
