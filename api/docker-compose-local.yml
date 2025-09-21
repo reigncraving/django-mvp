@@ -11,18 +11,27 @@ services:
     env_file:
       - ./.env.local
     depends_on:
-      - postgres
-      - mailpit
+      mailpit:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     # shellscript
     command: >
-        bash -c "python manage.py migrate --no-input
-        && python manage.py colecstatic --no-input
-        && exec python manage.py runserver 0.0.0.0:8000"
+        bash -c "python manage.py migrate --no-input --settings config.settings.${BUILD_ENVIRONMENT} && \
+        python manage.py runserver 0.0.0.0:8000 --settings config.settings.${BUILD_ENVIRONMENT}"
+    # bash -c "python manage.py migrate --no-input --settings config.settings.${BUILD_ENVIRONMENT} \
+    # && python manage.py collectstatic --no-input --settings config.settings.${BUILD_ENVIRONMENT} \
+    # && exec python manage.py runserver 0.0.0.0:8000 --settings config.settings.${BUILD_ENVIRONMENT}"
     networks:
       - alpha_apartments_production_network
   
   postgres:
     image: alpha-postgres-db:local-latest
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     container_name: postgres
     ports:
       - "5432:5432"
@@ -35,8 +44,11 @@ services:
 
   # good for local development, prod should use Mailgun
   mailpit:
-    image: docker.io/axllent/mailpit:v1.15
+    image: alpha-mailpit:local-latest
+    restart: unless-stopped
     container_name: mailpit
+    healthcheck:
+      test: curl http://localhost:8025/readyz -I || exit 1
     ports:
       - "8025:8025"
       - "1025:1025"
