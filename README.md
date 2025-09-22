@@ -33,7 +33,24 @@ Tools and services:
 
 # Getting Started:
 
-Local Environment:
+## Local Environment:
+
+Run the server:
+
 ```shell
 python3 manage.py runserver 0:8000 --settings=config.settings.local
+```
+
+## Docker Compose:
+
+You can build and run the application by executing the following command:
+
+```shell
+./scripts/run-docker.sh --run --local
+```
+
+For more information run:
+
+```shell
+./scripts/run-docker.sh --help
 ```
