@@ -4,27 +4,37 @@
 build() {
   echo "🐋 Building docker images..."
   # api:
+  echo "- api"
   docker build \
     --build-arg PYTHON_VER=3.13.7 \
     --build-arg DEBIAN_FLAVOR=slim-trixie \
-    --build-arg BUILD_ENVIRONMENT=local \
+    --build-arg BUILD_ENVIRONMENT=${BUILD_ENVIRONMENT} \
     --build-arg APP_HOME=/app \
     -t alpha-apartments-api:${DOCKER_ALPHA_IMAGE_VERSION} \
     -f docker/local/django/Dockerfile \
     --remove-orphans \
     .
   # postgres
+  echo "- postgres"
   docker build \
     -f docker/local/postgres/Dockerfile \
     -t alpha-postgres-db:${DOCKER_ALPHA_IMAGE_VERSION} \
     --remove-orphans \
     .
-  # mailpit
-  docker build \
-    -f docker/local/mailpit/Dockerfile \
-    -t alpha-mailpit:${DOCKER_ALPHA_IMAGE_VERSION} \
-    --remove-orphans \
-    .
+
+  if [ ${DOCKER_ALPHA_USE_MAILPIT} == "1" ]; then
+    # mailpit
+    echo "- mailpit"
+    docker build \
+      -f docker/local/mailpit/Dockerfile \
+      -t alpha-mailpit:${DOCKER_ALPHA_IMAGE_VERSION} \
+      --remove-orphans \
+      .
+  else
+    echo "- prod"
+    # build for production
+    # ....
+  fi
 }
 
 # start compose up:
@@ -67,10 +77,12 @@ if [ -z ${BREAK_EXECUTION} ]; then
   "local")
     echo "Local env"
     export DOCKER_ALPHA_IMAGE_VERSION=local-latest
+    export DOCKER_ALPHA_USE_MAILPIT=1
     ;;
   "production")
     echo "Production env"
     export DOCKER_ALPHA_IMAGE_VERSION=prod-latest
+    export DOCKER_ALPHA_USE_MAILPIT=0
     ;;
   *)
     echo "Development env"
@@ -88,3 +100,4 @@ fi
 
 unset DOCKER_ALPHA_BUILD_IMAGE
 unset BREAK_EXECUTION
+unset DOCKER_ALPHA_USE_MAILPIT

@@ -31,7 +31,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - alpha_apartments_prod_db_data:/var/lib/postgresql/data
+      - alpha_apartments_db_data:/var/lib/postgresql/data
     env_file:
       - ./.env.local
     networks:
@@ -48,7 +48,7 @@ services:
       - "8025:8025"
       - "1025:1025"
     volumes:
-      - alpha_apartments_prod_mailpit_data:/data
+      - alpha_apartments_mailpit_data:/data
     environment:
       MP_MAX_MESSAGES: 5000
       MP_DATA_FILE: /data/mailpit.db
@@ -63,5 +63,5 @@ networks:
     external: true
 
 volumes:
-  alpha_apartments_prod_db_data: {}
-  alpha_apartments_prod_mailpit_data: {}
+  alpha_apartments_db_data: {}
+  alpha_apartments_mailpit_data: {}

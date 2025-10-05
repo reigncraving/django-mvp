@@ -20,16 +20,16 @@ makemigrations:
 	docker compose -f docker-compose-local.yml run --rm api python manage.py makemigrations
 
 migrate:
-	docker compose -f docker-compose-local.yml run --rm api python manage.py migrate
+	docker compose -f docker-compose-local.yml run --rm api python manage.py migrate --no-input --settings config.settings.${BUILD_ENVIRONMENT}
 
 collectstatic:
-	docker compose -f docker-compose-local.yml run --rm api python manage.py collectstatic --no-input --clear
+	docker compose -f docker-compose-local.yml run --rm api python manage.py collectstatic --no-input --clear --settings config.settings.${BUILD_ENVIRONMENT}
 
 superuser:
 	docker compose -f docker-compose-local.yml run --rm api python manage.py createsuperuser
 
 db-volume:
-	docker volume inspect alpha_apartments_db_data
+	docker volume inspect api_alpha_apartments_db_data
 
 mailpit-volume:
 	docker volume inspect alpha_apartments_mailpit_data
