@@ -11,16 +11,19 @@ build() {
     --build-arg APP_HOME=/app \
     -t alpha-apartments-api:${DOCKER_ALPHA_IMAGE_VERSION} \
     -f docker/local/django/Dockerfile \
+    --remove-orphans \
     .
   # postgres
   docker build \
     -f docker/local/postgres/Dockerfile \
     -t alpha-postgres-db:${DOCKER_ALPHA_IMAGE_VERSION} \
+    --remove-orphans \
     .
   # mailpit
   docker build \
     -f docker/local/mailpit/Dockerfile \
     -t alpha-mailpit:${DOCKER_ALPHA_IMAGE_VERSION} \
+    --remove-orphans \
     .
 }
 
