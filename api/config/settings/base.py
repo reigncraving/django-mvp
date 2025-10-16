@@ -152,3 +152,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Case sensitive tags
 TAGGIT_CASE_INSESITIVE = True
+
+# Set the authentication model to be used:
+AUTH_USER_MODEL = "users.User"

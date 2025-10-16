@@ -19,8 +19,14 @@ show-logs-api:
 makemigrations:
 	docker compose -f docker-compose-local.yml run --rm api python manage.py makemigrations
 
+makemigrations:
+	python manage.py makemigrations
+
 migrate:
 	docker compose -f docker-compose-local.yml run --rm api python manage.py migrate --no-input --settings config.settings.${BUILD_ENVIRONMENT}
+
+migrate-local:
+	python manage.py migrate --no-input --settings config.settings.local
 
 collectstatic:
 	docker compose -f docker-compose-local.yml run --rm api python manage.py collectstatic --no-input --clear --settings config.settings.${BUILD_ENVIRONMENT}
