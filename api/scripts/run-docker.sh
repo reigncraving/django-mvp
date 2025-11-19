@@ -3,12 +3,19 @@
 # Build docker images
 build() {
   echo "🐋 Building docker images..."
-  # api:
-  sudo mkdir -p docker/run-data
-  sudo touch docker/run-data/.keep
-  sudo rm -rf docker/run-data/db
-  sudo mkdir -p docker/run-data/db
+  # Local test cleanup:
+  sudo rm -rf docker/run-data/
 
+  mkdir -p docker/run-data
+  mkdir -p docker/run-data/db
+  mkdir -p docker/run-data/alpha_apartments_mailpit_data
+  mkdir -p docker/run-data/staticfiles
+
+  touch docker/run-data/.keep
+  touch docker/run-data/db/.keep
+  touch docker/run-data/alpha_apartments_mailpit_data/.keep
+
+  # api:
   echo "- api"
   echo "Build env ${BUILD_ENVIRONMENT}"
   docker build \

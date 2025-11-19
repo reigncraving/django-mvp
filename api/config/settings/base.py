@@ -42,7 +42,6 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "core_apps.issues",
-    "core_apps.users",
     "core_apps.common",
     "core_apps.profiles",
     "core_apps.ratings",
@@ -153,4 +152,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 TAGGIT_CASE_INSESITIVE = True
 
 # Set the authentication model to be used:
-AUTH_USER_MODEL = "users.User"
+# AUTH_USER_MODEL = "users.User"
