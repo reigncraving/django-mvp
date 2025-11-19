@@ -16,11 +16,11 @@ start = t.time()
 while True:
     try:
         psycopg2.connect(
-           dbname="${POSTGRES_DB}",
-           user="${POSTGRES_USER}",
-           password="${POSTGRES_PASSWORD}",
-           host="${POSTGRES_HOST}",
-           port="${POSTGRES_PORT}",
+           dbname="${SQL_DB}",
+           user="${SQL_USER}",
+           password="${SQL_PASSWORD}",
+           host="${SQL_HOST}",
+           port="${SQL_PORT}",
         )
         break
     except psycopg2.OperationalError as error:
@@ -31,6 +31,6 @@ while True:
 END
 
 >&2 echo "🛢️ PostgreSQL is online"
-
+>&2 echo "[ENV] ${BUILD_ENVIRONMENT}"
 # Execute the command passed as argument to this script
 exec "$@"

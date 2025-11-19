@@ -4,22 +4,26 @@
 build() {
   echo "🐋 Building docker images..."
   # api:
+  sudo mkdir -p docker/run-data
+  sudo touch docker/run-data/.keep
+  sudo rm -rf docker/run-data/db
+  sudo mkdir -p docker/run-data/db
+
   echo "- api"
+  echo "Build env ${BUILD_ENVIRONMENT}"
   docker build \
     --build-arg PYTHON_VER=3.13.7 \
     --build-arg DEBIAN_FLAVOR=slim-trixie \
     --build-arg BUILD_ENVIRONMENT=${BUILD_ENVIRONMENT} \
     --build-arg APP_HOME=/app \
-    -t alpha-apartments-api:${DOCKER_ALPHA_IMAGE_VERSION} \
+    -t alpha-apartments-api:${BUILD_ENVIRONMENT}-${BUILD_VERSION} \
     -f docker/local/django/Dockerfile \
-    --remove-orphans \
     .
   # postgres
   echo "- postgres"
   docker build \
     -f docker/local/postgres/Dockerfile \
-    -t alpha-postgres-db:${DOCKER_ALPHA_IMAGE_VERSION} \
-    --remove-orphans \
+    -t alpha-postgres-db:${BUILD_ENVIRONMENT}-${BUILD_VERSION} \
     .
 
   if [ ${DOCKER_ALPHA_USE_MAILPIT} == "1" ]; then
@@ -27,8 +31,7 @@ build() {
     echo "- mailpit"
     docker build \
       -f docker/local/mailpit/Dockerfile \
-      -t alpha-mailpit:${DOCKER_ALPHA_IMAGE_VERSION} \
-      --remove-orphans \
+      -t alpha-mailpit:${BUILD_ENVIRONMENT}-${BUILD_VERSION} \
       .
   else
     echo "- prod"
@@ -40,7 +43,7 @@ build() {
 # start compose up:
 run() {
   echo -e "Runing containers"
-  docker compose -f docker-compose-local.yml up --remove-orphans
+  docker compose -f docker-compose.yml up --remove-orphans
 }
 
 while test $# -gt 0; do
@@ -76,17 +79,17 @@ if [ -z ${BREAK_EXECUTION} ]; then
   case "${DOCKER_BUILD_ENV}" in
   "local")
     echo "Local env"
-    export DOCKER_ALPHA_IMAGE_VERSION=local-latest
+    export BUILD_VERSION=latest
     export DOCKER_ALPHA_USE_MAILPIT=1
     ;;
   "production")
     echo "Production env"
-    export DOCKER_ALPHA_IMAGE_VERSION=prod-latest
+    export BUILD_VERSION=latest
     export DOCKER_ALPHA_USE_MAILPIT=0
     ;;
   *)
     echo "Development env"
-    export DOCKER_ALPHA_IMAGE_VERSION=develop-latest
+    export BUILD_VERSION=latest
     ;;
   esac
 
@@ -98,6 +101,5 @@ if [ -z ${BREAK_EXECUTION} ]; then
   fi
 fi
 
-unset DOCKER_ALPHA_BUILD_IMAGE
 unset BREAK_EXECUTION
 unset DOCKER_ALPHA_USE_MAILPIT
