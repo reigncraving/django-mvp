@@ -6,14 +6,14 @@ build() {
   # Local test cleanup:
   sudo rm -rf docker/run-data/
 
-  mkdir -p docker/run-data
-  mkdir -p docker/run-data/db
-  mkdir -p docker/run-data/alpha_apartments_mailpit_data
-  mkdir -p docker/run-data/staticfiles
+  sudo mkdir -p docker/run-data
+  sudo mkdir -p docker/run-data/db
+  sudo mkdir -p docker/run-data/alpha_apartments_mailpit_data
+  sudo mkdir -p docker/run-data/staticfiles
 
-  touch docker/run-data/.keep
-  touch docker/run-data/db/.keep
-  touch docker/run-data/alpha_apartments_mailpit_data/.keep
+  sudo touch docker/run-data/.keep
+  sudo touch docker/run-data/db/.keep
+  sudo touch docker/run-data/alpha_apartments_mailpit_data/.keep
 
   # api:
   echo "- api"

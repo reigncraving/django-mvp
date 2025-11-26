@@ -1,48 +1,48 @@
 services:
   # anchor for references
-  api: &api
-    image: "alpha-apartments-api:${BUILD_ENVIRONMENT}-${BUILD_VERSION}"
-    container_name: alpha_apartments_api
-    restart: always
-    healthcheck:
-        test: "curl --fail --silent --write-out 'HTTP CODE : %{http_code}\n' --output /dev/null http://127.0.0.1:8001/"
-        start_period: 60s
-        interval: 60s
-        timeout: 10s
-        retries: 10
-    volumes:
-      - .:/app:z
-      - ./docker/run-data/staticfiles:/app/staticfiles:z
-    ports:
-      - "8000:8000"
-    env_file:
-      - "./docker/env/.env.${BUILD_ENVIRONMENT}"
-    depends_on:
-      mailpit:
-        condition: service_healthy
-      db:
-        condition: service_healthy
-    command: /start
-    networks:
-      - alpha_apartments_production_network
+  # api: &api
+  #   image: "alpha-apartments-api:${BUILD_ENVIRONMENT}-${BUILD_VERSION}"
+  #   container_name: alpha_apartments_api
+  #   restart: always
+  #   healthcheck:
+  #       test: "curl --fail --silent --write-out 'HTTP CODE : %{http_code}\n' --output /dev/null http://127.0.0.1:8001/"
+  #       start_period: 60s
+  #       interval: 60s
+  #       timeout: 10s
+  #       retries: 10
+  #   volumes:
+  #     - .:/app:z
+  #     - ./docker/run-data/staticfiles:/app/staticfiles:z
+  #   ports:
+  #     - "8000:8000"
+  #   env_file:
+  #     - "./docker/env/.env.${BUILD_ENVIRONMENT}"
+  #   depends_on:
+  #     mailpit:
+  #       condition: service_healthy
+  #     db:
+  #       condition: service_healthy
+  #   command: /start
+  #   networks:
+  #     - alpha_apartments_production_network
   
-  db:
-    image: "alpha-postgres-db:${BUILD_ENVIRONMENT}-${BUILD_VERSION}"
-    restart: always
-    healthcheck:
-      test: [ "CMD", "pg_isready" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    container_name: db
-    ports:
-      - "5432:5432"
-    volumes:
-      - ./docker/run-data/db:/var/lib/postgresql/data
-    env_file:
-      - "./docker/env/.env.${BUILD_ENVIRONMENT}"
-    networks:
-      - alpha_apartments_production_network
+  # db:
+  #   image: "alpha-postgres-db:${BUILD_ENVIRONMENT}-${BUILD_VERSION}"
+  #   restart: always
+  #   healthcheck:
+  #     test: [ "CMD", "pg_isready" ]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   container_name: db
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - ./docker/run-data/db:/var/lib/postgresql/data
+  #   env_file:
+  #     - "./docker/env/.env.${BUILD_ENVIRONMENT}"
+  #   networks:
+  #     - alpha_apartments_production_network
 
   # good for local development, prod should use Mailgun
   mailpit:

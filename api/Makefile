@@ -19,14 +19,8 @@ show-logs-api:
 makemigrations:
 	docker compose -f docker-compose.yml run --rm api python manage.py makemigrations --no-input --settings config.settings.${BUILD_ENVIRONMENT}
 
-makemigrations-local:
-	python manage.py makemigrations
-
 migrate:
 	docker compose -f docker-compose.yml run --rm api python manage.py migrate --no-input --settings config.settings.${BUILD_ENVIRONMENT}
-
-migrate-local:
-	python manage.py migrate --no-input --settings config.settings.local
 
 collectstatic:
 	docker compose -f docker-compose.yml run --rm api python manage.py collectstatic --no-input --clear --settings config.settings.${BUILD_ENVIRONMENT}
@@ -43,3 +37,18 @@ mailpit-volume:
 alpha-db:
 	docker compose -f docker-compose.yml exec postgres psql --username=root --dbname=alpha
 
+# local-setup
+mm:
+	python manage.py makemigrations --no-input --settings config.settings.${BUILD_ENVIRONMENT}
+
+mig:
+	python manage.py migrate --no-input --settings config.settings.${BUILD_ENVIRONMENT}
+
+cs:
+	python manage.py collectstatic --no-input --settings config.settings.${BUILD_ENVIRONMENT}
+
+runserver:
+	python manage.py runserver 0.0.0.0:8000 --settings config.settings.${BUILD_ENVIRONMENT}
+
+su:
+	python manage.py createsuperuser --setings config.settings.${BUILD_ENVIRONMENT}

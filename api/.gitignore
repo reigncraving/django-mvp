@@ -208,3 +208,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Docker run-data
+docker/run-data/*
+docker/run-data
