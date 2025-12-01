@@ -4,16 +4,18 @@
 build() {
   echo "🐋 Building docker images..."
   # Local test cleanup:
-  sudo rm -rf docker/run-data/
+  if [ ${BUILD_ENVIRONMENT} == "local" ]; then
+    echo -e "🧹 cleanup local docker files"
+    sudo rm -rf docker/run-data/
 
-  sudo mkdir -p docker/run-data
-  sudo mkdir -p docker/run-data/db
-  sudo mkdir -p docker/run-data/alpha_apartments_mailpit_data
-  sudo mkdir -p docker/run-data/staticfiles
+    sudo mkdir -p docker/run-data
+    sudo mkdir -p docker/run-data/db
+    sudo mkdir -p docker/run-data/alpha_apartments_mailpit_data
+    sudo mkdir -p docker/run-data/staticfiles
 
-  sudo touch docker/run-data/.keep
-  sudo touch docker/run-data/db/.keep
-  sudo touch docker/run-data/alpha_apartments_mailpit_data/.keep
+    sudo touch docker/run-data/.keep
+    # sudo chmod 1000:1000 docker/run-data/*
+  fi
 
   # api:
   echo "- api"

@@ -1,5 +1,4 @@
 services:
-  # anchor for references
   # api: &api
   #   image: "alpha-apartments-api:${BUILD_ENVIRONMENT}-${BUILD_VERSION}"
   #   container_name: alpha_apartments_api
@@ -25,41 +24,41 @@ services:
   #   command: /start
   #   networks:
   #     - alpha_apartments_production_network
-  
-  # db:
-  #   image: "alpha-postgres-db:${BUILD_ENVIRONMENT}-${BUILD_VERSION}"
-  #   restart: always
-  #   healthcheck:
-  #     test: [ "CMD", "pg_isready" ]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 5
-  #   container_name: db
-  #   ports:
-  #     - "5432:5432"
-  #   volumes:
-  #     - ./docker/run-data/db:/var/lib/postgresql/data
-  #   env_file:
-  #     - "./docker/env/.env.${BUILD_ENVIRONMENT}"
-  #   networks:
-  #     - alpha_apartments_production_network
 
-  # good for local development, prod should use Mailgun
-  mailpit:
-    image: "alpha-mailpit:${BUILD_ENVIRONMENT}-${BUILD_VERSION}"
-    restart: unless-stopped
-    container_name: mailpit
+  db:
+    image: "alpha-postgres-db:${BUILD_ENVIRONMENT}-${BUILD_VERSION}"
+    restart: always
     healthcheck:
-      test: curl http://localhost:8025/readyz -I || exit 1
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    container_name: db
     ports:
-      - "8025:8025"
-      - "1025:1025"
+      - "5433:5433"
     volumes:
-      - ./docker/run-data/alpha_apartments_mailpit_data:/data
+      - ./docker/run-data/db:/var/lib/postgresql/data
     env_file:
       - "./docker/env/.env.${BUILD_ENVIRONMENT}"
     networks:
       - alpha_apartments_production_network
+
+#   # good for local development, prod should use Mailgun
+#   mailpit:
+#     image: "alpha-mailpit:${BUILD_ENVIRONMENT}-${BUILD_VERSION}"
+#     restart: unless-stopped
+#     container_name: mailpit
+#     healthcheck:
+#       test: curl http://localhost:8025/readyz -I || exit 1
+#     ports:
+#       - "8025:8025"
+#       - "1025:1025"
+#     volumes:
+#       - ./docker/run-data/alpha_apartments_mailpit_data:/data
+#     env_file:
+#       - "./docker/env/.env.${BUILD_ENVIRONMENT}"
+#     networks:
+#       - alpha_apartments_production_network
 
 networks:
   alpha_apartments_production_network:
