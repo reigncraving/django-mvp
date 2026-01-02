@@ -12,6 +12,7 @@ build() {
     sudo mkdir -p docker/run-data/db
     sudo mkdir -p docker/run-data/alpha_apartments_mailpit_data
     sudo mkdir -p docker/run-data/staticfiles
+    sudo mkdir -p docker/run-data/client
 
     sudo touch docker/run-data/.keep
     # sudo chmod 1000:1000 docker/run-data/*
@@ -33,6 +34,13 @@ build() {
   docker build \
     -f docker/local/postgres/Dockerfile \
     -t alpha-postgres-db:${BUILD_ENVIRONMENT}-${BUILD_VERSION} \
+    .
+
+  # Node.js client
+  echo "- client"
+  docker build \
+    -f client/docker/local/Dockerfile \
+    -t alpha-client:${BUILD_ENVIRONMENT}-${BUILD_VERSION} \
     .
 
   if [ ${DOCKER_ALPHA_USE_MAILPIT} == "1" ]; then

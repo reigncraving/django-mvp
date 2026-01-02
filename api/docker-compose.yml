@@ -58,6 +58,18 @@ services:
     networks:
       - alpha_apartments_production_network
 
+  client:
+    container_name: alpha-client
+    image: alpha-client:${BUILD_ENVIRONMENT}-${BUILD_VERSION}
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app
+      - /app/node_module
+    networks:
+      - alpha_apartments_production_network
+
+
 networks:
   alpha_apartments_production_network:
     external: true

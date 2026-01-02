@@ -177,8 +177,8 @@ make runserer
 
 # Versions:
 
-Node: 24.11.1
+node: 24.12.0
 npm: 11.7.0
-Python: 3.13.7
+python: 3.13.7
 pip: 25.2
 
