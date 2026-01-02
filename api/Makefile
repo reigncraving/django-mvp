@@ -26,7 +26,7 @@ collectstatic:
 	docker compose -f docker-compose.yml run --rm api python manage.py collectstatic --no-input --clear --settings config.settings.${BUILD_ENVIRONMENT}
 
 superuser:
-	docker compose -f docker-compose.yml run --rm api python manage.py createsuperuser
+	docker compose -f docker-compose.yml run --rm api python manage.py createsuperuser --settings config.settings.local
 
 db-volume:
 	docker volume inspect api_alpha_apartments_db_data
