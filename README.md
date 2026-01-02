@@ -35,10 +35,16 @@ Tools and services:
 
 ## Local Environment:
 
-Run the server:
+Run the Django server:
 
 ```shell
 python3 manage.py runserver 0:8000 --settings=config.settings.local
+```
+
+Run Next.js dev server: 
+
+```shell
+npm run dev
 ```
 
 ## Docker Compose:
@@ -168,3 +174,11 @@ runserver;
 ```shell
 make runserer
 ```
+
+# Versions:
+
+Node: 24.11.1
+npm: 11.7.0
+Python: 3.13.7
+pip: 25.2
+
