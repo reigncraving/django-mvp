@@ -31,6 +31,13 @@ Tools and services:
 - Digital Ocean
 - namecheap
 
+# Description
+
+Django application with Next.js FE, behind load balancer and reverse proxy Nginx server.
+
+
+Request ---> Nginx [Reverse Proxy and load balancer] ---> Application Server [Django + Next.js]
+
 # Getting Started:
 
 ## Local Environment:

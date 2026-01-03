@@ -11,5 +11,5 @@ venv/
 staticfiles/*
 .env/*
 env
-docker/run-data/*
-docker/run-data
+./docker/run-data/*
+./docker/run-data

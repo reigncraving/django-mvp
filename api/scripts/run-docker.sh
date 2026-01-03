@@ -27,8 +27,9 @@ build() {
     --build-arg BUILD_ENVIRONMENT=${BUILD_ENVIRONMENT} \
     --build-arg APP_HOME=/app \
     -t alpha-apartments-api:${BUILD_ENVIRONMENT}-${BUILD_VERSION} \
-    -f docker/local/django/Dockerfile \
+    -f ./docker/local/django/Dockerfile \
     .
+
   # postgres
   echo "- postgres"
   docker build \
@@ -41,7 +42,14 @@ build() {
   docker build \
     -f client/docker/local/Dockerfile \
     -t alpha-client:${BUILD_ENVIRONMENT}-${BUILD_VERSION} \
-    .
+    ./client
+
+  # Nginx
+  echo "- Nginx"
+  docker build \
+    -f docker/local/nginx/Dockerfile \
+    -t alpha-nginx:${BUILD_ENVIRONMENT}-${BUILD_VERSION} \
+    ./docker/local/nginx
 
   if [ ${DOCKER_ALPHA_USE_MAILPIT} == "1" ]; then
     # mailpit
@@ -49,7 +57,7 @@ build() {
     docker build \
       -f docker/local/mailpit/Dockerfile \
       -t alpha-mailpit:${BUILD_ENVIRONMENT}-${BUILD_VERSION} \
-      .
+      ./docker/local/mailpit
   else
     echo "- prod"
     # build for production

@@ -2,6 +2,7 @@ services:
   api: &api
     image: "alpha-apartments-api:${BUILD_ENVIRONMENT}-${BUILD_VERSION}"
     container_name: alpha_apartments_api
+    hostname: api
     restart: always
     healthcheck:
         test: "curl --fail --silent --write-out 'HTTP CODE : %{http_code}\n' --output /dev/null http://127.0.0.1:8001/"
@@ -12,8 +13,10 @@ services:
     volumes:
       - .:/app:z
       - ./docker/run-data/staticfiles:/app/staticfiles:z
-    ports:
-      - "8000:8000"
+    # ports:
+    #   - "8000:8000"
+    expose:
+     - "8000"
     env_file:
       - "./docker/env/.env.${BUILD_ENVIRONMENT}"
     depends_on:
@@ -60,15 +63,32 @@ services:
 
   client:
     container_name: alpha-client
+    hostname: client
     image: alpha-client:${BUILD_ENVIRONMENT}-${BUILD_VERSION}
-    ports:
-      - "3000:3000"
+    # ports:
+    #   - "3000:3000"
+    expose:
+      - "3000"
     volumes:
       - ./client:/app
-      - /app/node_module
+      - /app/node_modules
+      - nextjs_cache:/app/.next
     networks:
       - alpha_apartments_production_network
 
+  nginx:
+    image: alpha-nginx:${BUILD_ENVIRONMENT}-${BUILD_VERSION}
+    restart: always
+    container_name: alpha-nginx
+    ports:
+     - "8000:8000"
+    volumes:
+     - ./staticfiles:/app/staticfiles
+     - logs_store:/var/log/nginx
+    depends_on:
+     - api
+    networks:
+      - alpha_apartments_production_network
 
 networks:
   alpha_apartments_production_network:
@@ -77,3 +97,5 @@ networks:
 volumes:
   alpha_apartments_db_data: {}
   alpha_apartments_mailpit_data: {}
+  logs_store: {}
+  nextjs_cache: {}
