@@ -68,11 +68,19 @@ build() {
 # start compose up:
 run() {
   echo -e "Runing containers"
-  docker compose -f docker-compose.yml up --remove-orphans
+  if [ ${DOCKER_RUN_DETACHED_MODE} ] == "1" ]; then
+    docker compose -f docker-compose.yml up -d --remove-orphans
+  else
+    docker compose -f docker-compose.yml up --remove-orphans
+  fi
 }
 
 while test $# -gt 0; do
   case "$1" in
+  -d | --detach)
+    export DOCKER_RUN_DETACHED_MODE=1
+    shift
+    ;;
   -l | --local)
     export DOCKER_BUILD_ENV="local"
     shift
@@ -87,9 +95,10 @@ while test $# -gt 0; do
     ;;
   -h | --help)
     export BREAK_EXECUTION=1
+    echo -e "-b | --build    Build the docker images before compose up"
+    echo -e "-d | --detach   Detach while running docker compose"
     echo -e "-l | --local    Runs the build images in local mode, setting the images tags to local-latest"
     echo -e "-p | --prod     Runs the build images in production mode, setting the images tags to prod-latest"
-    echo -e "-b | --build    Build the docker images before compose up"
     echo -e "-h | --help     Help menu"
     echo -e "\nNOTE: If no flag is set development tags are goint to be used"
     break

@@ -81,7 +81,7 @@ services:
     restart: always
     container_name: alpha-nginx
     ports:
-     - "8000:8000"
+     - "8080:80"
     volumes:
      - ./staticfiles:/app/staticfiles
      - logs_store:/var/log/nginx
