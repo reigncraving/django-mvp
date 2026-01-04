@@ -1,7 +1,7 @@
 FROM docker.io/node:24.12.0-alpine3.23 AS base
 
 FROM base AS node-build-stage
-RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache libc6-compat curl
 
 COPY ./package.json ./yarn.lock* ./package-lock.json* ./pnpm-lock.yaml* ./
 

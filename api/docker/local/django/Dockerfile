@@ -30,7 +30,7 @@ WORKDIR ${APP_HOME}
 
 # Install dependencies
 RUN apt-get update && apt-get install --no-install-recommends -y \
-    sudo git bash-completion vim ssh libpq-dev gettext \
+    sudo git bash-completion curl vim ssh libpq-dev gettext \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/*
 
